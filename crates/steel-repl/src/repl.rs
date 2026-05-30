@@ -46,14 +46,26 @@ fn display_help() {
     );
 }
 
+// fn get_default_startup() -> ColoredString {
+//     format!(
+//         r#"
+//      _____ __            __
+//     / ___// /____  ___  / /          Version {} 
+//     \__ \/ __/ _ \/ _ \/ /           https://github.com/mattwparas/steel
+//    ___/ / /_/  __/  __/ /            :? for help
+//   /____/\__/\___/\___/_/
+//     "#,
+//         env!("CARGO_PKG_VERSION")
+//     )
+//     .bright_yellow()
+//     .bold()
+// }
+
 fn get_default_startup() -> ColoredString {
     format!(
         r#"
-     _____ __            __
-    / ___// /____  ___  / /          Version {} 
-    \__ \/ __/ _ \/ _ \/ /           https://github.com/mattwparas/steel
-   ___/ / /_/  __/  __/ /            :? for help
-  /____/\__/\___/\___/_/
+   __ _.._. _  _.._ _ 
+  _) (_.[  (/,(_][ | )   version {}
     "#,
         env!("CARGO_PKG_VERSION")
     )
@@ -177,7 +189,7 @@ pub fn readline_module(vm: &mut Engine) {
             RustyLine(rl)
         })
         .register_fn("#%read-line", |rl: &mut RustyLine| {
-            let prompt = format!("{}", "λ > ".bright_green().bold().italic());
+            let prompt = format!("{}", "~~> ".bright_green().bold().italic());
             rl.0.readline(&prompt).map_err(RustyLineError)
         });
 
@@ -252,10 +264,10 @@ impl<S: Display, P: AsRef<Path> + Debug> Repl<S, P> {
         }
 
         #[cfg(target_os = "windows")]
-        let mut prompt = String::from("λ > ");
+        let mut prompt = String::from("~~> ");
 
         #[cfg(not(target_os = "windows"))]
-        let mut prompt = format!("{}", "λ > ".bright_green().bold().italic());
+        let mut prompt = format!("{}", "~~> ".bright_green().bold().italic());
 
         let mut rl = Editor::<RustylineHelper, rustyline::history::DefaultHistory>::new()
             .expect("Unable to instantiate the repl!");
@@ -364,7 +376,7 @@ impl<S: Display, P: AsRef<Path> + Debug> Repl<S, P> {
                             // Update the prompt to now include the new context
                             prompt = format!(
                                 "{}",
-                                format!("λ ({line}) > ").bright_green().bold().italic(),
+                                format!("({line}) > ").bright_green().bold().italic(),
                             );
 
                             let mut file = file?;
